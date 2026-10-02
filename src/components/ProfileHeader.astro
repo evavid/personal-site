@@ -7,10 +7,16 @@ interface Props {
 const { headingLevel: Heading = "h1" } = Astro.props;
 ---
 
-<div class="banner">
-  <img src={site.coverImage} alt="" width="1280" height="320" />
-</div>
-<section class="profile">
+{
+  site.coverImage ? (
+    <div class="banner">
+      <img src={site.coverImage} alt="" width="1280" height="320" />
+    </div>
+  ) : (
+    <div class="ribbon" />
+  )
+}
+<section class:list={["profile", { "on-ribbon": !site.coverImage }]}>
   <div class="portrait">
     <img src={site.portraitImage} alt={`Portrait of ${site.name}`} width="200" height="200" />
   </div>

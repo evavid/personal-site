@@ -11,8 +11,9 @@ export const site = {
   githubUser: "evavid",
   linkedinUrl: "https://www.linkedin.com/in/eva-vidmar-899b56168/",
 
-  // Images in /public/images.
-  coverImage: "/images/cover.jpg",
+  // Images in /public/images. Leave coverImage empty ("") for a slim ink ribbon
+  // instead of a photo banner; set it to "/images/cover.jpg" to bring the photo back.
+  coverImage: "",
   portraitImage: "/images/portrait.jpg",
 
   // Repos to show, in order. Leave empty to show your most recently

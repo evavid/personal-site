@@ -95,6 +95,10 @@ a:hover { color: var(--link); }
   border: 6px solid var(--bg); background: var(--bg); border-radius: 50%; overflow: hidden;
 }
 .portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+/* Slim ink ribbon in place of the photo banner (config: coverImage = ""). */
+.ribbon { height: 96px; background: var(--text); }
+.on-ribbon .portrait { width: 168px; height: 168px; margin-top: -72px; }
+.on-ribbon { grid-template-columns: 168px minmax(0, 1fr); }
 .profile-text { padding-top: 36px; display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; }
 .profile h1 { font-size: 56px; line-height: 1; letter-spacing: -0.025em; margin-left: -3px; }
 .profile .sub { margin-top: 14px; font-size: 18px; line-height: 1.5; color: var(--text-soft); }
@@ -249,6 +253,9 @@ a:hover { color: var(--link); }
   .banner { height: 200px; }
   .profile { grid-template-columns: 1fr; gap: 0; padding-bottom: 48px; }
   .portrait { width: 120px; height: 120px; margin-top: -60px; }
+  .ribbon { height: 64px; }
+  .on-ribbon { grid-template-columns: 1fr; }
+  .on-ribbon .portrait { width: 112px; height: 112px; margin-top: -48px; }
   .profile-text { padding-top: 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
   .profile h1, .page-head h1 { font-size: 40px; }
   .columns { grid-template-columns: 1fr; gap: 56px; }
