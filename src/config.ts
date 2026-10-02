@@ -11,10 +11,9 @@ export const site = {
   githubUser: "evavid",
   linkedinUrl: "https://www.linkedin.com/in/eva-vidmar-899b56168/",
 
-  // Images in /public/images. Replace the placeholder SVGs with your LinkedIn
-  // cover and portrait (e.g. cover.jpg, portrait.jpg) and update these paths.
-  coverImage: "/images/cover.svg",
-  portraitImage: "/images/portrait.svg",
+  // Images in /public/images. The portrait is shown in black and white by CSS.
+  coverImage: "/images/cover.jpg",
+  portraitImage: "/images/portrait.jpg",
 
   // Repos to show, in order. Leave empty to show your most recently
   // updated public, non-fork repos (up to `maxProjects`).
