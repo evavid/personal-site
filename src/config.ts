@@ -1,7 +1,7 @@
 // Everything personal lives here. Edit this file, not the components.
 export const site = {
   // Change to your real domain once you have one (used for RSS, sitemap, canonical URLs).
-  url: "https://eva-vidmar.pages.dev",
+  url: "https://personal-site.eva-vidmar2.workers.dev",
   name: "Eva Vidmar",
   tagline: "Notes on AI, life and technology. Projects with their code.",
   location: "Ljubljana",

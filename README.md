@@ -21,13 +21,13 @@ npm run build      # production build into dist/
 | Use my real photos | Put `cover.jpg` and `portrait.jpg` in `public/images/`, update the paths in `src/config.ts`. |
 | Change colours / type | Tokens at the top of `src/styles/global.css`. |
 
-## Deploy to Cloudflare Pages (free)
+## Deploy (Cloudflare Workers, free)
 
 1. Push this folder to a GitHub repository.
-2. In the Cloudflare dashboard: **Workers & Pages → Create → Pages → Connect to Git**, pick the repo.
-3. Build settings: framework preset **Astro**, build command `npm run build`, output directory `dist`.
+2. In the Cloudflare dashboard: **Workers & Pages → Create → Import a repository**, pick the repo.
+3. Build command `npm run build`, deploy command `npx wrangler deploy` (config in `wrangler.jsonc`; its `name` must match the Worker name).
 4. Optional, under **Settings → Variables**: `GITHUB_TOKEN` (a fine-grained token with public read access only), which raises the GitHub API rate limit.
-5. Every push to `main` redeploys. The site lives at `https://<project>.pages.dev` until you add a custom domain (**Custom domains** tab).
+5. Every push to `main` redeploys. Live at https://personal-site.eva-vidmar2.workers.dev until a custom domain is added (**Settings → Domains & Routes**).
 
 When you get a domain, update `url` in `src/config.ts` so RSS and the sitemap use it.
 
