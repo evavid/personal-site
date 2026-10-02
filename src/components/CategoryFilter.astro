@@ -1,0 +1,64 @@
+---
+// Client-side category filter. Links work without JS (they just show everything);
+// with JS the list filters in place and the choice is mirrored in ?tag=.
+import { categories } from "../config";
+
+interface Props {
+  /** id of the .list element to filter */
+  target: string;
+  /** show at most this many matching rows (home page) */
+  limit?: number;
+}
+const { target, limit } = Astro.props;
+const options = [["all", "All"], ...Object.entries(categories)] as const;
+---
+
+<nav class="filters" aria-label="Filter by category" data-filter-for={target} data-limit={limit}>
+  {options.map(([key, label]) => (
+    <a href={key === "all" ? "?" : `?tag=${key}`} data-tag={key} aria-current={key === "all" ? "true" : undefined}>{label}</a>
+  ))}
+</nav>
+
+<script>
+  function apply(nav: HTMLElement, tag: string) {
+    const list = document.getElementById(nav.dataset.filterFor!);
+    if (!list) return;
+    const limit = Number(nav.dataset.limit) || Infinity;
+    let shown = 0;
+    let last: HTMLElement | undefined;
+    for (const row of list.querySelectorAll<HTMLElement>("[data-category]")) {
+      const match = tag === "all" || row.dataset.category === tag;
+      row.hidden = !match || shown >= limit;
+      row.classList.remove("is-last");
+      if (!row.hidden) {
+        shown++;
+        last = row;
+      }
+    }
+    last?.classList.add("is-last");
+    const empty = list.querySelector<HTMLElement>("[data-empty]");
+    if (empty) empty.hidden = shown > 0;
+    for (const a of nav.querySelectorAll<HTMLElement>("[data-tag]")) {
+      if (a.dataset.tag === tag) a.setAttribute("aria-current", "true");
+      else a.removeAttribute("aria-current");
+    }
+  }
+
+  for (const nav of document.querySelectorAll<HTMLElement>("[data-filter-for]")) {
+    const valid = new Set([...nav.querySelectorAll<HTMLElement>("[data-tag]")].map((a) => a.dataset.tag));
+    const initial = new URLSearchParams(location.search).get("tag") ?? "all";
+    apply(nav, valid.has(initial) ? initial : "all");
+
+    nav.addEventListener("click", (e) => {
+      const a = (e.target as HTMLElement).closest<HTMLElement>("[data-tag]");
+      if (!a) return;
+      e.preventDefault();
+      const tag = a.dataset.tag!;
+      apply(nav, tag);
+      const url = new URL(location.href);
+      if (tag === "all") url.searchParams.delete("tag");
+      else url.searchParams.set("tag", tag);
+      history.replaceState(null, "", url);
+    });
+  }
+</script>

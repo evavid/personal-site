@@ -1,0 +1,29 @@
+---
+import Base from "../layouts/Base.astro";
+import ProfileHeader from "../components/ProfileHeader.astro";
+import { site } from "../config";
+---
+
+<Base title="About" active="about">
+  <ProfileHeader />
+
+  <div class="about-body">
+    <div class="facts">
+      <div><div class="label">Based</div><div class="value">{site.location}</div></div>
+      <div><div class="label">Work</div><div class="value">{site.role}</div></div>
+      <div><div class="label">Studied</div><div class="value">{site.education}</div></div>
+    </div>
+
+    <!-- TODO: replace with your own bio. -->
+    <div class="prose">
+      <p>
+        I'm Eva, a solution engineer in Ljubljana. This is where I write about what I'm building, what I'm
+        learning about AI and technology, and life outside work.
+      </p>
+      <p>
+        Every project on this site links to its code. If something here is useful to you, or wrong, I'd like to
+        hear about it. The best place to reach me is <a href={site.linkedinUrl}>LinkedIn</a>.
+      </p>
+    </div>
+  </div>
+</Base>

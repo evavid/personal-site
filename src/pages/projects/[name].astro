@@ -1,0 +1,122 @@
+---
+import Base from "../../layouts/Base.astro";
+import ArrowUpRight from "../../components/ArrowUpRight.astro";
+import { site, categories } from "../../config";
+import { getRepos, getRepoDetail, type Repo } from "../../lib/github";
+import { getPosts, postUrl } from "../../lib/posts";
+import { fullShortDate, relativeTime } from "../../lib/format";
+
+export async function getStaticPaths() {
+  const repos = await getRepos();
+  return repos.map((repo) => ({ params: { name: repo.name }, props: { repo } }));
+}
+
+interface Props {
+  repo: Repo;
+}
+
+const repo = await getRepoDetail(Astro.props.repo);
+const related = (await getPosts()).filter((p) => p.data.project?.toLowerCase() === repo.name.toLowerCase());
+
+const stats = [
+  { label: "Stars", value: String(repo.stars) },
+  { label: "Main language", value: repo.language ?? "—" },
+  { label: "Latest release", value: repo.latestRelease ?? "—" },
+  { label: "Last commit", value: relativeTime(repo.commits[0]?.date ?? repo.pushedAt) },
+];
+---
+
+<Base title={repo.name} description={repo.description ?? undefined} active="projects">
+  <div style="padding:0 var(--pad)">
+    <header class="project-head">
+      <div>
+        <span class="owner">{site.githubUser} /</span>
+        <h1>{repo.name}</h1>
+        {repo.description && <p class="desc">{repo.description}</p>}
+        {
+          repo.topics.length > 0 && (
+            <div class="tags">
+              {repo.topics.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </div>
+          )
+        }
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary btn-block" href={repo.url}>View on GitHub <ArrowUpRight /></a>
+        {repo.homepage && <a class="btn btn-ghost btn-block" href={repo.homepage}>Live demo</a>}
+      </div>
+    </header>
+
+    <hr class="hr" />
+    <section class="stats-row">
+      {
+        stats.map((s) => (
+          <div>
+            <div class="value">{s.value}</div>
+            <div class="label">{s.label}</div>
+          </div>
+        ))
+      }
+    </section>
+    <hr class="hr" />
+
+    <section class="columns project-body" style="padding-inline:0">
+      <div>
+        <div class="readme-head label">
+          <span>README</span>
+          {repo.commits[0] && <span class="mono" style="text-transform:none;letter-spacing:0">{repo.defaultBranch} · {repo.commits[0].sha}</span>}
+        </div>
+        {
+          repo.readmeHtml ? (
+            <div class="prose readme" set:html={repo.readmeHtml} />
+          ) : (
+            <p class="muted">No README yet.</p>
+          )
+        }
+        <a class="more" href={`${repo.url}#readme`}>Full README on GitHub →</a>
+      </div>
+
+      <div class="side-stack">
+        {
+          related.length > 0 && (
+            <div>
+              <span class="label">Written about it</span>
+              <div class="list related">
+                {related.map((p) => (
+                  <a href={postUrl(p)}>
+                    <span class="title">{p.data.title}</span>
+                    <span class="meta">
+                      {categories[p.data.category]} · {fullShortDate(p.data.date)}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+        {
+          repo.commits.length > 0 && (
+            <div>
+              <span class="label">Recent commits</span>
+              <table class="table">
+                <tbody>
+                  {repo.commits.map((c) => (
+                    <tr>
+                      <td class="mono">
+                        <a href={c.url}>{c.sha}</a>
+                      </td>
+                      <td>{c.message}</td>
+                      <td class="num muted">{relativeTime(c.date, false)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
+        }
+      </div>
+    </section>
+  </div>
+</Base>

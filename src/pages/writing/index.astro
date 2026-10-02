@@ -1,0 +1,27 @@
+---
+import Base from "../../layouts/Base.astro";
+import PostRow from "../../components/PostRow.astro";
+import CategoryFilter from "../../components/CategoryFilter.astro";
+import { getPosts } from "../../lib/posts";
+
+const posts = await getPosts();
+---
+
+<Base title="Writing" active="writing" description="Notes on AI, life and technology.">
+  <div class="page">
+    <header class="page-head">
+      <h1>Writing</h1>
+      <p>Notes on AI, life and technology.</p>
+    </header>
+    <div class="page-body">
+      <div class="section-head">
+        <span class="label">{posts.length} {posts.length === 1 ? "post" : "posts"}</span>
+        <CategoryFilter target="all-posts" />
+      </div>
+      <div class="list" id="all-posts">
+        {posts.map((post, i) => <PostRow post={post} showExcerpt last={i === posts.length - 1} />)}
+        <p class="empty" data-empty hidden={posts.length > 0}>Nothing in this category yet.</p>
+      </div>
+    </div>
+  </div>
+</Base>

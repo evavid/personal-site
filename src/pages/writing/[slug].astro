@@ -1,0 +1,84 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import ArrowUpRight from "../../components/ArrowUpRight.astro";
+import { categories } from "../../config";
+import { getPosts, postUrl, readingTime, type Post } from "../../lib/posts";
+import { getRepos } from "../../lib/github";
+import { longDate } from "../../lib/format";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  // Posts are newest first: "previous" is the older post, "next" the newer one.
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, older: posts[i + 1], newer: posts[i - 1] },
+  }));
+}
+
+interface Props {
+  post: Post;
+  older?: Post;
+  newer?: Post;
+}
+
+const { post, older, newer } = Astro.props;
+const { title, date, category, excerpt, project, cover } = post.data;
+const { Content } = await render(post);
+
+const repo = project ? (await getRepos()).find((r) => r.name.toLowerCase() === project.toLowerCase()) : undefined;
+const repoStats = repo ? [repo.language, `★ ${repo.stars}`, repo.license].filter(Boolean).join(" · ") : "";
+---
+
+<Base title={title} description={excerpt} active="writing">
+  <article class="article">
+    <a class="back" href="/writing/">← Writing</a>
+    <div class="label">
+      {categories[category]} · <time datetime={date.toISOString()}>{longDate(date)}</time> · {readingTime(post)} min
+    </div>
+    <h1>{title}</h1>
+    <hr class="hr" />
+    {cover && <img class="cover" src={cover} alt="" />}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      repo && (
+        <a class="code-strip" href={repo.url}>
+          <span>
+            <span class="label">Code for this post</span>
+            <span class="name">{repo.name}</span>
+            <span class="stats">{repoStats}</span>
+          </span>
+          <span class="go">
+            View on GitHub
+            <ArrowUpRight />
+          </span>
+        </a>
+      )
+    }
+
+    {
+      (older || newer) && (
+        <nav class="prevnext" aria-label="More writing">
+          {older ? (
+            <a href={postUrl(older)}>
+              <span class="muted" style="font-size:13px">← Previous</span>
+              <span class="title">{older.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {newer && (
+            <a class="next" href={postUrl(newer)}>
+              <span class="muted" style="font-size:13px">Next →</span>
+              <span class="title">{newer.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )
+    }
+  </article>
+</Base>

@@ -1,0 +1,26 @@
+---
+import { categories } from "../config";
+import { postUrl, readingTime, type Post } from "../lib/posts";
+import { shortDate } from "../lib/format";
+
+interface Props {
+  post: Post;
+  showExcerpt?: boolean;
+  hidden?: boolean;
+  /** last visible row before any JS runs (gets the closing 2px rule) */
+  last?: boolean;
+}
+const { post, showExcerpt = false, hidden = false, last = false } = Astro.props;
+const { title, category, project, excerpt, date } = post.data;
+---
+
+<a class:list={["post-row", { "is-last": last }]} href={postUrl(post)} data-category={category} hidden={hidden}>
+  <span>
+    <span class="title">{title}</span>
+    {showExcerpt && excerpt && <span class="excerpt">{excerpt}</span>}
+    <span class="meta">
+      {categories[category]} · {readingTime(post)} min{project && <> · <span class="link">with project</span></>}
+    </span>
+  </span>
+  <time class="date" datetime={date.toISOString()}>{shortDate(date)}</time>
+</a>

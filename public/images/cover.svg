@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" preserveAspectRatio="xMidYMid slice">
+  <!-- Placeholder: replace with your LinkedIn cover photo (see src/config.ts). -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b5d78"/>
+      <stop offset="1" stop-color="#a9c0d3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="320" fill="url(#sky)"/>
+  <path d="M0 250 L170 170 L290 225 L460 120 L610 215 L760 150 L930 230 L1080 160 L1280 240 V320 H0Z" fill="#5f7a8f"/>
+  <path d="M0 290 L210 230 L380 275 L560 210 L740 280 L940 225 L1120 285 L1280 255 V320 H0Z" fill="#40576a"/>
+</svg>

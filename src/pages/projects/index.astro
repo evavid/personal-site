@@ -1,0 +1,57 @@
+---
+import Base from "../../layouts/Base.astro";
+import { site } from "../../config";
+import { getRepos, getRepoDetail } from "../../lib/github";
+import { relativeTime } from "../../lib/format";
+
+// Use the last commit date: pushed_at changes on any push (e.g. moving a repo between accounts).
+const repos = await Promise.all(
+  (await getRepos()).map(async (repo) => {
+    const detail = await getRepoDetail(repo);
+    return { ...repo, updated: detail.commits[0]?.date ?? repo.pushedAt };
+  }),
+);
+---
+
+<Base title="Projects" active="projects" description="Personal projects, with their code on GitHub.">
+  <div class="page">
+    <header class="page-head">
+      <h1>Projects</h1>
+      <p>Things I've built, pulled from <a class="link" href={`https://github.com/${site.githubUser}`}>GitHub</a>.</p>
+    </header>
+    <div class="page-body" style="max-width:none">
+      {
+        repos.length ? (
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Repository</th>
+                <th class="hide-sm">What it does</th>
+                <th class="hide-sm">Language</th>
+                <th class="num">Stars</th>
+                <th class="num hide-sm">Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {repos.map((repo) => (
+                <tr>
+                  <td class="repo">
+                    <a href={`/projects/${repo.name}/`}>{repo.name}</a>
+                  </td>
+                  <td class="hide-sm" style="color:var(--text-soft)">{repo.description}</td>
+                  <td class="hide-sm muted">{repo.language}</td>
+                  <td class="num muted">★ {repo.stars}</td>
+                  <td class="num hide-sm muted">{relativeTime(repo.updated)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div class="list">
+            <p class="empty">Projects will appear here after the next build.</p>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</Base>

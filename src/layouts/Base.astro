@@ -1,0 +1,70 @@
+---
+import "../styles/global.css";
+import { site } from "../config";
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: "writing" | "projects" | "about";
+}
+
+const { title, description = site.tagline, active } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const githubUrl = `https://github.com/${site.githubUser}`;
+
+const links = [
+  { key: "writing", href: "/writing/", label: "Writing" },
+  { key: "projects", href: "/projects/", label: "Projects" },
+  { key: "about", href: "/about/", label: "About" },
+] as const;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={title ?? site.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="nav">
+      <a class="nav-brand" href="/">{site.name}</a>
+      <nav class="nav-links" aria-label="Main">
+        {links.map((l) => <a href={l.href} aria-current={active === l.key ? "page" : undefined}>{l.label}</a>)}
+      </nav>
+      <details class="nav-menu">
+        <summary>Menu</summary>
+        <nav class="nav-links" aria-label="Main (mobile)">
+          {links.map((l) => <a href={l.href} aria-current={active === l.key ? "page" : undefined}>{l.label}</a>)}
+        </nav>
+      </details>
+      <a class="btn btn-secondary" href={githubUrl} rel="me">GitHub</a>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <span>© {new Date().getFullYear()} {site.name}</span>
+      <nav aria-label="Elsewhere">
+        <a href={githubUrl} rel="me">GitHub</a>
+        <a href={site.linkedinUrl} rel="me">LinkedIn</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
+    </footer>
+  </body>
+</html>

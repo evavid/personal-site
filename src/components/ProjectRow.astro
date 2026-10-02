@@ -1,0 +1,17 @@
+---
+import type { Repo } from "../lib/github";
+
+interface Props {
+  repo: Repo;
+}
+const { repo } = Astro.props;
+const stats = [repo.language, `★ ${repo.stars}`].filter(Boolean).join(" · ");
+---
+
+<a class="project-row" href={`/projects/${repo.name}/`}>
+  <span class="top">
+    <span class="name">{repo.name}</span>
+    <span class="stats">{stats}</span>
+  </span>
+  {repo.description && <span class="desc">{repo.description}</span>}
+</a>

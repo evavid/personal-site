@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro";
+import ProfileHeader from "../components/ProfileHeader.astro";
+import PostRow from "../components/PostRow.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import CategoryFilter from "../components/CategoryFilter.astro";
+import { getPosts } from "../lib/posts";
+import { getRepos } from "../lib/github";
+
+const HOME_POSTS = 4;
+const HOME_PROJECTS = 3;
+
+const posts = await getPosts();
+const repos = (await getRepos()).slice(0, HOME_PROJECTS);
+---
+
+<Base>
+  <ProfileHeader />
+
+  <section class="columns">
+    <div>
+      <div class="section-head">
+        <span class="label">Writing</span>
+        <CategoryFilter target="home-posts" limit={HOME_POSTS} />
+      </div>
+      <div class="list" id="home-posts">
+        {posts.map((post, i) => (
+          <PostRow post={post} hidden={i >= HOME_POSTS} last={i === Math.min(posts.length, HOME_POSTS) - 1} />
+        ))}
+        <p class="empty" data-empty hidden={posts.length > 0}>Nothing here yet.</p>
+      </div>
+      <a class="more" href="/writing/">All writing →</a>
+    </div>
+
+    <div>
+      <div class="section-head">
+        <span class="label">Projects</span>
+        <span class="label" style="text-transform:none;letter-spacing:0">from GitHub</span>
+      </div>
+      <div class="list">
+        {repos.length ? repos.map((repo) => <ProjectRow repo={repo} />) : <p class="empty">Projects will appear here after the next build.</p>}
+      </div>
+      <a class="more" href="/projects/">All projects →</a>
+    </div>
+  </section>
+</Base>

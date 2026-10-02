@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Placeholder: replace with your portrait (see src/config.ts). -->
+  <rect width="200" height="200" fill="#d7d3d3"/>
+  <circle cx="100" cy="82" r="36" fill="#9b9797"/>
+  <path d="M30 200c6-44 36-68 70-68s64 24 70 68Z" fill="#9b9797"/>
+</svg>

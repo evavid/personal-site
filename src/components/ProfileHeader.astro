@@ -1,0 +1,30 @@
+---
+import { site } from "../config";
+
+interface Props {
+  headingLevel?: "h1" | "p";
+}
+const { headingLevel: Heading = "h1" } = Astro.props;
+---
+
+<div class="banner">
+  <img src={site.coverImage} alt="" width="1280" height="320" />
+</div>
+<section class="profile">
+  <div class="portrait">
+    <img class="grayscale" src={site.portraitImage} alt={`Portrait of ${site.name}`} width="200" height="200" />
+  </div>
+  <div class="profile-text">
+    <div>
+      <Heading class="h1">{site.name}</Heading>
+      <p class="sub">{site.tagline}</p>
+    </div>
+    <span class="where">{site.location} · {site.role}</span>
+  </div>
+</section>
+
+<style>
+  /* Lets the name keep H1 styling even if rendered as <p>. */
+  .h1 { font-weight: 800; font-size: 56px; line-height: 1; letter-spacing: -0.025em; margin: 0 0 0 -3px; }
+  @media (max-width: 880px) { .h1 { font-size: 40px; } }
+</style>

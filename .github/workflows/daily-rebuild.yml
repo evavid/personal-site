@@ -1,0 +1,20 @@
+# Rebuilds the site once a day so GitHub stars, commits and READMEs stay fresh.
+# Setup: Cloudflare Pages → your project → Settings → Builds → Deploy hooks → create one,
+# then add its URL as a repository secret named CF_DEPLOY_HOOK.
+name: Daily rebuild
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # 05:00 UTC
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages build
+        env:
+          HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "CF_DEPLOY_HOOK secret not set"; exit 1; fi
+          curl -fsS -X POST "$HOOK"
