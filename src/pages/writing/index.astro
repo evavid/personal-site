@@ -16,11 +16,13 @@ const posts = await getPosts();
     <div class="page-body">
       <div class="section-head">
         <span class="label">{posts.length} {posts.length === 1 ? "post" : "posts"}</span>
-        <CategoryFilter target="all-posts" />
+        {posts.length > 0 && <CategoryFilter target="all-posts" />}
       </div>
       <div class="list" id="all-posts">
         {posts.map((post, i) => <PostRow post={post} showExcerpt last={i === posts.length - 1} />)}
-        <p class="empty" data-empty hidden={posts.length > 0}>Nothing in this category yet.</p>
+        <p class="empty" data-empty hidden={posts.length > 0}>
+          {posts.length ? "Nothing in this category yet." : "The first posts are on their way."}
+        </p>
       </div>
     </div>
   </div>

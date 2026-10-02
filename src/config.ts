@@ -11,7 +11,7 @@ export const site = {
   githubUser: "evavid",
   linkedinUrl: "https://www.linkedin.com/in/eva-vidmar-899b56168/",
 
-  // Images in /public/images. The portrait is shown in black and white by CSS.
+  // Images in /public/images.
   coverImage: "/images/cover.jpg",
   portraitImage: "/images/portrait.jpg",
 

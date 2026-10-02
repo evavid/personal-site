@@ -92,9 +92,9 @@ a:hover { color: var(--link); }
 }
 .portrait {
   width: 200px; height: 200px; margin-top: -100px; position: relative;
-  border: 6px solid var(--bg); background: var(--bg);
+  border: 6px solid var(--bg); background: var(--bg); border-radius: 50%; overflow: hidden;
 }
-.portrait img { width: 100%; height: 100%; object-fit: cover; }
+.portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .profile-text { padding-top: 36px; display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; }
 .profile h1 { font-size: 56px; line-height: 1; letter-spacing: -0.025em; margin-left: -3px; }
 .profile .sub { margin-top: 14px; font-size: 18px; line-height: 1.5; color: var(--text-soft); }

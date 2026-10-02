@@ -21,15 +21,17 @@ const repos = (await getRepos()).slice(0, HOME_PROJECTS);
     <div>
       <div class="section-head">
         <span class="label">Writing</span>
-        <CategoryFilter target="home-posts" limit={HOME_POSTS} />
+        {posts.length > 0 && <CategoryFilter target="home-posts" limit={HOME_POSTS} />}
       </div>
       <div class="list" id="home-posts">
         {posts.map((post, i) => (
           <PostRow post={post} hidden={i >= HOME_POSTS} last={i === Math.min(posts.length, HOME_POSTS) - 1} />
         ))}
-        <p class="empty" data-empty hidden={posts.length > 0}>Nothing here yet.</p>
+        <p class="empty" data-empty hidden={posts.length > 0}>
+          {posts.length ? "Nothing in this category yet." : "The first posts are on their way. Follow along via RSS."}
+        </p>
       </div>
-      <a class="more" href="/writing/">All writing →</a>
+      {posts.length > 0 ? <a class="more" href="/writing/">All writing →</a> : <a class="more" href="/rss.xml">RSS feed →</a>}
     </div>
 
     <div>
